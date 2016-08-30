@@ -22,6 +22,17 @@ if ( !function_exists('msdlab_has_shortcode') ) {
     }
 }
 
+/**
+ * Check if a post is a particular post type.
+ */
+if(!function_exists('is_cpt')){
+    function is_cpt($cpt){
+        global $post;
+        $ret = get_post_type( $post ) == $cpt?TRUE:FALSE;
+        return $ret;
+    }
+}
+
 /*
 * A useful troubleshooting function. Displays arrays in an easy to follow format in a textarea.
 */

@@ -3,7 +3,7 @@
 Plugin Name: MSD Content Source
 Description: A little plugin for marking pages with content that needs review.
 Author: MSDLAB
-Version: 0.0.1
+Version: 0.0.2
 Author URI: http://msdlab.com
 */
 
