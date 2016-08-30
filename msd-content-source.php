@@ -184,6 +184,9 @@ if(!class_exists('MSDContentSource')){
         
         function add_css(){
             global $post;
+            if(is_cpt('post')){
+                return $classes;
+            }
             $terms = get_the_terms($post->ID,'content_source');
             if(count($terms)>0){
                 $content_source_string = $terms[0]->name;
