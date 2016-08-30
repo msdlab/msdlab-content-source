@@ -3,7 +3,7 @@
 Plugin Name: MSD Content Source
 Description: A little plugin for marking pages with content that needs review.
 Author: MSDLAB
-Version: 0.0.3
+Version: 0.0.4
 Author URI: http://msdlab.com
 */
 
@@ -13,7 +13,6 @@ Author URI: http://msdlab.com
  * 3) Allow a switch for notes and/or content source capability adjustment
  * 4) Add a "remove all remarks" button to clear items prior to launch
  * 
- * Also maybe add an admin bar dropdown that shows the notes on thr front end?
  */
 
 if(!class_exists('GitHubPluginUpdater')){
@@ -71,7 +70,7 @@ if(!class_exists('MSDContentSource')){
             add_action( 'init', array(&$this,'register_taxonomy_content_source'), 99 );
             add_action( 'init', array( &$this, 'add_metaboxes' ), 99 );
             add_action( 'wp_print_styles', array(&$this,'add_css') );
-            
+            add_action('wp_before_admin_bar_render', array(&$this,'toolbar_render'), 100);
             //Filters
             add_filter( 'body_class', array(&$this,'watermark_content') );
         }
@@ -221,6 +220,61 @@ if(!class_exists('MSDContentSource')){
             ';
             print $css;
         }
+
+        function toolbar_render() {
+            if(is_cpt('post')){
+                return false;
+            }
+            global $content_source_notes_mb,$post;
+            $terms = get_the_terms($post->ID,'content_source');
+            if($terms){
+                $cs = $terms[0]->name;
+            } else {
+                $cs = 'FPO';
+            }
+            $this->render_item($cs); // Parent item
+            $content_source_notes_mb->the_meta();
+            $notes = $content_source_notes_mb->get_the_value('notes');
+            if(strlen($notes)>0){
+                $this->render_item('Notes', false, $cs,array('html'=>'<div style="padding: 0 0.75em;line-height: 1.65;">'.$notes.'</div>'));
+            }
+        }
+
+        function render_item( $name, $href = '', $parent = '', $custom_meta = array() ) {
+            global $wp_admin_bar;
+        
+            if ( ! is_super_admin()
+                 || ! is_object( $wp_admin_bar ) 
+                 || ! function_exists( 'is_admin_bar_showing' ) 
+                 || ! is_admin_bar_showing() ) {
+                return;
+            }
+            // Generate ID based on the current filename and the name supplied.
+            $id = sanitize_key( basename(__FILE__, '.php' ) . '-' . $name );
+        
+            // Generate the ID of the parent.
+            if(strlen($parent)>0){
+                $parent = sanitize_key( basename(__FILE__, '.php' ) . '-' . $parent );
+            } else {
+                $name = 'Content Source: '.$name;
+            }
+        
+            // links from the current host will open in the current window
+        
+            $meta = strpos( $href, site_url() ) !== false ? array() : array( 'target' => '_blank' ); // external links open in new tab/window
+            $meta = array_merge( $meta, $custom_meta );
+            
+            $args = array(
+                'parent' => $parent,
+                'id' => $id,
+                'title' => $name,
+                'href' => $href,
+                'meta' => $meta,
+            );
+        
+            $wp_admin_bar->add_node($args);
+        }
+
     }
 }
 
