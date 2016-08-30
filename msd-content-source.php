@@ -3,7 +3,7 @@
 Plugin Name: MSD Content Source
 Description: A little plugin for marking pages with content that needs review.
 Author: MSDLAB
-Version: 0.0.2
+Version: 0.0.3
 Author URI: http://msdlab.com
 */
 
@@ -66,6 +66,7 @@ if(!class_exists('MSDContentSource')){
         function __construct(){
             global $current_screen;
             register_activation_hook(__FILE__, array(&$this,'activate'));
+            requireDir(plugin_dir_path(__FILE__).'/lib/inc');
             //Actions
             add_action( 'init', array(&$this,'register_taxonomy_content_source'), 99 );
             add_action( 'init', array( &$this, 'add_metaboxes' ), 99 );
