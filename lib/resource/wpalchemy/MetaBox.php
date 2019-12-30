@@ -401,7 +401,7 @@ class WPAlchemy_MetaBox
 
     public function __construct($arr)
     {
-        $this->_loop_data = new \stdClass;
+        $this->_loop_data = new stdClass;
 
         $this->meta = array();
 
@@ -825,7 +825,7 @@ class WPAlchemy_MetaBox
      */
     public function add_filter($tag, $function_to_add, $priority = 10, $accepted_args = 1)
     {
-        $tag = $this->_get_filter_tag($tag);;
+        $tag = $this->_get_filter_tag($tag);
         add_filter($tag, $function_to_add, $priority, $accepted_args);
     }
 
@@ -2084,7 +2084,7 @@ class WPAlchemy_MetaBox
 
         $this->in_loop = FALSE;
 
-        $this->_loop_data = new \stdClass;
+        $this->_loop_data = new stdClass;
 
         return FALSE;
     }

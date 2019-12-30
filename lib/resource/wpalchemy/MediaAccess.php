@@ -353,7 +353,7 @@
 							}
 
 							tb_remove();
-						}
+						};
 
 						function getInsertButtonLabel()
 						{

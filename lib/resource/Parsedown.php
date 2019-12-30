@@ -427,7 +427,7 @@ class Parsedown
                     {
                         $label = strtolower($matches[1]);
 
-                        $this->reference_map[$label] = trim($matches[2], '<>');;
+                        $this->reference_map[$label] = trim($matches[2], '<>');
 
                         continue 2;
                     }
